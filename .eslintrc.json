@@ -1,0 +1,21 @@
+{
+    "parser": "@typescript-eslint/parser",
+    "parserOptions": {
+        "ecmaVersion": 2018,
+        "sourceType": "module"
+    },
+    "ignorePatterns": ["dist", "webpack", "test", "*.config.*"],
+    "plugins": ["@typescript-eslint", "react", "react-hooks"],
+    "extends": ["plugin:react/recommended", "plugin:react/jsx-runtime", "plugin:@typescript-eslint/recommended", "prettier"],
+    "rules": {
+        "react-hooks/rules-of-hooks": "error",
+        "react-hooks/exhaustive-deps": "warn",
+        "react/prop-types": "off"
+    },
+    "settings": {
+        "react": {
+            "pragma": "React",
+            "version": "detect"
+        }
+    }
+}

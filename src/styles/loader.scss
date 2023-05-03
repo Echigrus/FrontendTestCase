@@ -1,0 +1,20 @@
+.ftc-loader {
+    position: fixed;
+    background: rgb(0, 0, 0, 0.4);
+    width: 100%;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    z-index: 9999;
+    &.full {
+        .anticon-spin {
+            top: 50%;
+            bottom: 0;
+        }
+    }
+    .anticon-spin {
+        font-size: 52px !important;
+        vertical-align: middle;
+    }
+}

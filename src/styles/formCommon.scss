@@ -1,0 +1,30 @@
+.ftc-common {
+    .ftc-common-form {
+        align-content: center;
+        align-items: center;
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: flex-start;
+
+        .ant-form-item {
+            width: 50%;
+
+            &.quarter-width {
+                width: 25%;
+            }
+
+            &.full-width {
+                width: 100%;
+            }
+
+            &.pad-left {
+                padding-left: 20px;
+            }
+
+            &.pad-right {
+                padding-right: 20px;
+            }
+        }
+    }
+}

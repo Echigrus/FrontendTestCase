@@ -1,0 +1,16 @@
+.ftc-app-sider {
+    background-color: #fafafa !important;
+    display: flex;
+    height: 100%;
+
+    .ant-layout-sider-children {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        margin: 0 14%;
+
+        .ftc-steps .ant-steps-item-title {
+            font-weight: 500;
+        }
+    }
+}

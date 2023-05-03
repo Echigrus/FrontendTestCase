@@ -1,0 +1,60 @@
+html,
+body {
+    height: 100%;
+    margin: 0;
+    min-width: 300px;
+    padding: 0;
+
+    #ftc-root {
+        height: 100%;
+
+        section {
+            height: 100%;
+        }
+
+        .ftc-primary-text {
+            font-size: 18px;
+            font-weight: bold;
+        }
+    
+        .ftc-secondary-text {
+            font-size: 16px;
+            font-weight: normal;
+        }
+        
+        .ftc-icon {
+            align-content: center;
+            align-items: center;
+            background-color: $iconBackground;
+            border-radius: 30px;
+            display: flex;
+            flex-direction: row;
+            flex-wrap: nowrap;
+            justify-content: center;
+            height: 60px;
+            width: 60px;
+
+            svg.icon-blue {
+                color: $iconBlue;
+                font-size: 20px;
+            }
+        }
+    
+        .ftc-common {
+            background-color: $white;
+            height: 100%;
+            padding: 100px;
+            width: 100%;
+
+            .ant-row {
+                padding: 10px 0;
+            }
+
+            .align-corners {
+                display: flex;
+                flex-direction: row;
+                justify-content: space-between;
+            }
+        }
+    }
+}
