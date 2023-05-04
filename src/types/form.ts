@@ -5,11 +5,12 @@ import { TEntrepreneur } from "./entrepreneur";
 import { TSocial } from "./social";
 
 type TForm = TCommonData & {
-    entrepreneur: boolean;
+    ownershipForm?: "entrepreneur" | "company";
     entrepreneurData?: TEntrepreneur;
     companyData?: TCompany;
     registrationAddress: TAddress;
-    residentialAddress: TAddress;
+    addressesMatch: boolean;
+    residentialAddress?: TAddress;
     socials: TSocial[];
 };
 

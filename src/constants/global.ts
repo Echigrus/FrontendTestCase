@@ -9,10 +9,11 @@ class GlobalConstants {
      */
     public static BaseUrl = process.env.API_URL;
     
-    /**
-     * Длительность оповещения в сек.
-     */
-    public static NotificationDuration = 3;
+    public static Countries = ['Россия', 'Беларусь', 'Казахстан'];
+
+    public static Regions = ['Москва', 'Московская область', 'Краснодарский край', 'Санкт-Петербург'];
+
+    public static Cities = ['Москва', 'Санкт-Петербург', 'Минск', 'Астана', 'Алматы']
 };
 
 export { GlobalConstants };

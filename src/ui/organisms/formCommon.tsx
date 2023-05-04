@@ -1,30 +1,60 @@
-import { faUser } from "@fortawesome/free-solid-svg-icons";
+import { Common } from "@classes/commonFunctions";
+import { GlobalConstants } from "@constants/global";
+import { FormRoutes } from "@enums/formRoutes";
+import { faPerson, faPersonDress, faUser } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Button, Col, DatePicker, Form, Input, Row } from "antd";
+import { FormStore } from "@store/formStore";
+import { Button, Col, DatePicker, Form, Input, Popconfirm, Radio, Row, Select } from "antd";
+import { observer } from "mobx-react";
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
-const FormCommon = (): JSX.Element => {
+type TProps = {
+    store: FormStore
+};
+
+const FormCommon = observer(({ store }: TProps): JSX.Element => {
     const [commonForm] = Form.useForm();
+    let navigate  = useNavigate();
+    const namePattern = /^([a-zA-Zа-яА-ЯёЁ]+([-']{1}[a-zA-Zа-яА-ЯёЁ]+)*){1,3}$/;
 
     function handleOk() {
-        // Валидация, передача данных в store, навигация дальше
+        commonForm.validateFields()
+            .then((values) => {
+                let newValues = values;
+                if (values.patronymic == "") newValues.patronymic = null;
+                store.changeCommonData(values);
+                navigate(FormRoutes.OwnershipForm);
+            })
+            .catch((errorInfo) => console.log(errorInfo));
     }
+
+    useEffect(() => {
+        commonForm.setFieldsValue(store.getCommonData());
+    }, []);
 
     return (
         <Col className="ftc-common">
             <Row>
-                <div className="ftc-icon">
-                    <FontAwesomeIcon className="icon-blue" icon={faUser} />
-                </div>
+                <Col>
+                    <div className="ftc-icon">
+                        <FontAwesomeIcon className="icon-blue" icon={faUser} />
+                    </div>
+                </Col>
             </Row>
             <Row>
-                <p className="ftc-primary-text">
-                    Общие
-                </p>
+                <Col>
+                    <p className="ftc-primary-text">
+                        Общие
+                    </p>
+                </Col>
             </Row>
             <Row>
-                <p className="ftc-secondary-text">
-                    Введите свои персональные данные.
-                </p>
+                <Col>
+                    <p className="ftc-secondary-text">
+                        Введите свои персональные данные.
+                    </p>
+                </Col>
             </Row>
             <Row>
                 <Form
@@ -32,98 +62,158 @@ const FormCommon = (): JSX.Element => {
                     form={commonForm}
                     layout="vertical"
                 >
-                    <Form.Item
-                        className="pad-right"
-                        name="surname"
-                        label="Фамилия"
-                        rules={[
-                            { required: true, message: 'Пожалуйста, введите фамилию' },
-                            { type: "string", min: 2, max: 60, message: 'От 2 до 60 символов' }
-                        ]}
-                    >
-                        <Input placeholder="Васильев" />
-                    </Form.Item>
-                    <Form.Item
-                        className="pad-left"
-                        name="name"
-                        label="Имя"
-                        rules={[
-                            { required: true, message: 'Пожалуйста, введите имя' },
-                            { type: "string", min: 2, max: 60, message: 'От 2 до 60 символов' }
-                        ]}
-                    >
-                        <Input placeholder="Иван" />
-                    </Form.Item>
-                    <Form.Item
-                        className="pad-right"
-                        name="patronymic"
-                        label="Отчество"
-                        rules={[
-                            { type: "string", min: 0, max: 60, message: 'Не больше 60 символов' }
-                        ]}
-                    >
-                        <Input placeholder="Сергеевич" />
-                    </Form.Item>
-                    <Form.Item
-                        className="pad-left"
-                        name="city"
-                        label="Основной город"
-                        rules={[
-                            { required: true, message: 'Пожалуйста, выберите город' }
-                        ]}
-                    >
-                        {/* TODO: Выбор города */}
-                    </Form.Item>
-                    <Form.Item
-                        className="pad-right"
-                        name="citizenship"
-                        label="Гражданство"
-                        rules={[
-                            { required: true, message: 'Пожалуйста, укажите гражданство' }
-                        ]}
-                    >
-                        {/* TODO: Выбор гражданства */}
-                    </Form.Item>
-                    <Form.Item
-                        className="quarter-width pad-left pad-right"
-                        name="male"
-                        label="Пол"
-                        rules={[
-                            { required: true, message: 'Пожалуйста, выберите пол' }
-                        ]}
-                    >
-                        {/* TODO: Выбор пола */}
-                    </Form.Item>
-                    <Form.Item
-                        className="quarter-width pad-left"
-                        name="dateOfBirth"
-                        label="Дата рождения"
-                        rules={[
-                            { required: true, message: 'Пожалуйста, введите дату рождения' }
-                        ]}
-                    >
-                        <DatePicker format="DD.MM.YYYY" />
-                    </Form.Item>
-                    <Form.Item
-                        className="full-width"
-                        name="placeOfBirth"
-                        label="Место рождения (как указано в паспорте)"
-                        rules={[
-                            { required: true, message: 'Пожалуйста, введите место рождения' },
-                            { type: "string", min: 2, max: 120, message: 'От 2 до 120 символов' }
-                        ]}
-                    >
-                        <Input placeholder="Введите наименование региона и населенного пункта" />
-                    </Form.Item>
+                    <Row>
+                        <Col className="half-width">
+                            <Form.Item
+                                name="surname"
+                                label="Фамилия"
+                                rules={[
+                                    { required: true, message: 'Пожалуйста, введите фамилию', pattern: namePattern },
+                                    { type: "string", min: 2, max: 60, message: 'От 2 до 60 символов', whitespace: true }
+                                ]}
+                            >
+                                <Input placeholder="Васильев" />
+                            </Form.Item>
+                        </Col>
+                        <Col className="half-width">
+                            <Form.Item
+                                name="name"
+                                label="Имя"
+                                rules={[
+                                    { required: true, message: 'Пожалуйста, введите имя', pattern: namePattern },
+                                    { type: "string", min: 2, max: 60, message: 'От 2 до 60 символов', whitespace: true }
+                                ]}
+                            >
+                                <Input placeholder="Иван" />
+                            </Form.Item>
+                        </Col>
+                    </Row>
+                    <Row>
+                        <Col className="half-width">
+                            <Form.Item
+                                name="patronymic"
+                                label="Отчество"
+                                rules={[
+                                    { type: "string", min: 0, max: 60, message: 'Не больше 60 символов', whitespace: true }
+                                ]}
+                            >
+                                <Input placeholder="Сергеевич" />
+                            </Form.Item>
+                        </Col>
+                        <Col className="half-width">
+                            <Form.Item
+                                name="city"
+                                label="Основной город"
+                                rules={[
+                                    { required: true, message: 'Пожалуйста, выберите город' }
+                                ]}
+                            >
+                                <Select 
+                                    options={GlobalConstants.Cities.map((val) => {
+                                        return { value: val, label: val };
+                                    })}
+                                    placeholder="Выберите город"
+                                />
+                            </Form.Item>
+                        </Col>
+                    </Row>
+                    <Row>
+                        <Col className="half-width">
+                            <Form.Item
+                                name="citizenship"
+                                label="Гражданство"
+                                rules={[
+                                    { required: true, message: 'Пожалуйста, укажите гражданство' }
+                                ]}
+                            >
+                                <Select 
+                                    options={GlobalConstants.Countries.map((val) => {
+                                        return { value: val, label: val };
+                                    })}
+                                    placeholder="Выберите страну"
+                                />
+                            </Form.Item>
+                        </Col>
+                        <Col className="quarter-width">
+                            <Form.Item
+                                name="male"
+                                label="Пол"
+                                rules={[
+                                    { required: true, message: 'Пожалуйста, выберите пол' }
+                                ]}
+                            >
+                                <Radio.Group className="ftc-common-male" buttonStyle="solid">
+                                    <Radio.Button value={true}>
+                                        <Row>
+                                            <Col>
+                                                <FontAwesomeIcon icon={faPerson} />
+                                            </Col>
+                                            <Col>
+                                                М
+                                            </Col>
+                                        </Row>
+                                    </Radio.Button>
+                                    <Radio.Button value={false}>
+                                        <Row>
+                                            <Col>
+                                                <FontAwesomeIcon icon={faPersonDress} />
+                                            </Col>
+                                            <Col>
+                                                Ж
+                                            </Col>
+                                        </Row>
+                                    </Radio.Button>
+                                </Radio.Group>
+                            </Form.Item>
+                        </Col>
+                        <Col className="quarter-width">
+                            <Form.Item
+                                name="dateOfBirth"
+                                label="Дата рождения"
+                                rules={[
+                                    { required: true, message: 'Пожалуйста, введите дату рождения' },
+                                    { validator: Common.dateValidator }
+                                ]}
+                            >
+                                <DatePicker format="DD.MM.YYYY" />
+                            </Form.Item>
+                        </Col>
+                    </Row>
+                    <Row>
+                        <Col className="full-width">
+                            <Form.Item
+                                name="placeOfBirth"
+                                label="Место рождения (как указано в паспорте)"
+                                rules={[
+                                    { required: true, message: 'Пожалуйста, введите место рождения' },
+                                    { type: "string", min: 2, max: 120, message: 'От 2 до 120 символов', whitespace: true }
+                                ]}
+                            >
+                                <Input placeholder="Введите наименование региона и населенного пункта" />
+                            </Form.Item>
+                        </Col>
+                    </Row>
                 </Form>
             </Row>
             <Row className="align-corners">
                 <Col>
-                    <Button
-                        type="default"
+                    <Popconfirm
+                        title="Удалить данные?"
+                        description="Это действие опустошит всю анкету"
+                        okText="Да"
+                        cancelText="Нет"
+                        onConfirm={() => {
+                            store.clear();
+                            commonForm.resetFields();
+                            commonForm.setFieldsValue(store.getCommonData());
+                        }}
                     >
-                        Отмена
-                    </Button>
+                        <Button
+                            type="default"
+                        >
+                            Отмена
+                        </Button>
+                    </Popconfirm>
                 </Col>
                 <Col>
                     <Button
@@ -136,6 +226,6 @@ const FormCommon = (): JSX.Element => {
             </Row>
         </Col>
     );
-};
+});
 
 export { FormCommon };

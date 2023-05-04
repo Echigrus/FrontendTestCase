@@ -1,28 +1,29 @@
 import { FormRoutes } from "@enums/formRoutes";
 import { FSteps } from "@molecules/steps";
 import { FormCommon } from "@organisms/formCommon";
+import { FormOwnership } from "@organisms/formOwnership";
+import { FormRegistrationAddress } from "@organisms/formRegistrationAddress";
+import { FormResidentialAddress } from "@organisms/formResidentialAddress";
+import { FormSocials } from "@organisms/formSocials";
+import { FormStore } from "@store/formStore";
 import { Layout } from "antd";
 import Sider from "antd/es/layout/Sider";
 import { Content } from "antd/es/layout/layout";
-import { useEffect } from "react";
-import { Routes, Route, useNavigate, useLocation } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
+
+const formStore = new FormStore();
 
 const App = (): JSX.Element => {
-    let navigate  = useNavigate();
-    let location = useLocation();
-
-    useEffect(() => {
-        if (location?.pathname == '/') navigate(FormRoutes.Common);
-    }, [location.pathname]);
-
     function getBody(): JSX.Element {
         return (
             <Routes>
-                <Route path={FormRoutes.Common} element={<FormCommon />} />
-                <Route path={FormRoutes.OwnershipForm} element={<></>} />
-                <Route path={FormRoutes.RegistrationAddress} element={<></>} />
-                <Route path={FormRoutes.ResidentialAddress} element={<></>} />
-                <Route path={FormRoutes.Socials} element={<></>} />
+                <Route path="/" element={<Navigate to={FormRoutes.Common} replace={true} />} />
+                <Route path={FormRoutes.Common} element={<FormCommon store={formStore} />} />
+                <Route path={FormRoutes.OwnershipForm} element={<FormOwnership store={formStore} />} />
+                <Route path={FormRoutes.RegistrationAddress} element={<FormRegistrationAddress store={formStore} />} />
+                <Route path={FormRoutes.ResidentialAddress} element={<FormResidentialAddress store={formStore} />} />
+                <Route path={FormRoutes.Socials} element={<FormSocials store={formStore} />} />
+                <Route path="*" element={<Navigate to="/" replace={true} />} />
             </Routes>
         );
     }

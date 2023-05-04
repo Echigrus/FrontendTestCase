@@ -16,7 +16,6 @@
         "@fortawesome/free-solid-svg-icons": "^6.4.0",
         "@fortawesome/react-fontawesome": "^0.2.0",
         "antd": "^5.4.6",
-        "antd-mask-input": "^2.0.7",
         "assert": "^2.0.0",
         "axios": "^1.4.0",
         "core-js": "^3.30.1",

@@ -5,7 +5,7 @@ type TCommonData = {
     city: string;
     citizenship: string;
     male: boolean;
-    dateOfBirth: Date;
+    dateOfBirth?: Date;
     placeOfBirth: string;
 };
 

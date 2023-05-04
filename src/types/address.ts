@@ -6,7 +6,7 @@ type TAddress = {
     house: number;
     apartment?: number;
     noApartment: boolean;
-    dateOfRegistration: Date;
+    dateOfRegistration?: Date;
 };
 
 export { TAddress };

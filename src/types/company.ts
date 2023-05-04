@@ -3,7 +3,7 @@ type TCompany = {
     shortName: string;
     INN: string;
     scanINN?: string | File;
-    registrationDate: Date;
+    registrationDate?: Date;
     OGRN: string;
     scanOGRN?: string | File;
 };

@@ -40,14 +40,53 @@ body {
             }
         }
     
-        .ftc-common {
+        .ftc-common, .ftc-ownership, .ftc-registration-address {
             background-color: $white;
             height: 100%;
-            padding: 100px;
+            padding: 60px;
             width: 100%;
 
+            form {
+                margin: 0 -5px;
+            }
+
             .ant-row {
-                padding: 10px 0;
+                align-content: center;
+                align-items: center;
+                display: flex;
+                flex-direction: row;
+                flex-wrap: wrap;
+                justify-content: flex-start;
+                padding-bottom: 10px;
+                width: 100%;
+            }
+
+            .ant-col {
+                padding: 0 5px;
+            }
+
+            .full-width {
+                width: 100%;
+            }
+
+            .three-quarters-width {
+                width: 75%;
+                min-width: 400px;
+            }
+
+            .half-width {
+                width: 50%;
+                min-width: 300px;
+            }
+
+            .quarter-width {
+                max-width: 25%;
+                min-width: 170px;
+            }
+
+            .eighth-width {
+                max-width: 12.5%;
+                min-width: 100px;
             }
 
             .align-corners {
@@ -55,6 +94,10 @@ body {
                 flex-direction: row;
                 justify-content: space-between;
             }
+        }
+        
+        .ftc-common .ftc-common-form .ftc-common-male .ant-row {
+            padding: 0 !important;
         }
     }
 }

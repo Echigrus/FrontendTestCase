@@ -1,7 +1,7 @@
 type TEntrepreneur = {
     INN: string;
     scanINN?: string | File;
-    registrationDate: Date;
+    registrationDate?: Date;
     OGRNIP: string;
     scanOGRNIP?: string | File;
     leaseContract?: string | File;
