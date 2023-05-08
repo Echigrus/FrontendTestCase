@@ -1,12 +1,16 @@
 import { Common } from "@classes/commonFunctions";
+import { ImgUploader } from "@molecules/imgUploader";
+import { FormStore } from "@store/formStore";
 import { FormInstance, Form, Row, Col, Input, DatePicker, Checkbox } from "antd";
+import React from "react";
 
 type TProps = {
-    form: FormInstance
+    form: FormInstance,
+    setIsLoading: React.Dispatch<React.SetStateAction<boolean>>,
+    store: FormStore
 };
 
-const FormEntrepreneur = ({ form }: TProps): JSX.Element => {
-
+const FormEntrepreneur = ({ form, setIsLoading, store }: TProps): JSX.Element => {
     return (
         <Form
             className="ftc-entrepreneur-form"
@@ -33,7 +37,22 @@ const FormEntrepreneur = ({ form }: TProps): JSX.Element => {
                             { required: true, message: "Пожалуйста, прикрепите скан ИНН" }
                         ]}
                     >
-                        {/* TODO: загрузка файла */}
+                        <ImgUploader
+                            onImageSelect={(file) => {
+                                form.setFieldValue("scanINN", file);
+                                store.changeEntrepreneurData({
+                                    ...store.getEntrepeneurData(),
+                                    scanINN: file
+                                });
+                            }}
+                            onImageDelete={() => {
+                                form.setFieldValue("scanINN", null);
+                                store.changeEntrepreneurData({
+                                    ...store.getEntrepeneurData(),
+                                    scanINN: null
+                                });
+                            }}
+                        />
                     </Form.Item>
                 </Col>
                 <Col className="quarter-width">

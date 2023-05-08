@@ -17,7 +17,12 @@ const FormRegistrationAddress = observer(({ store }: TProps): JSX.Element => {
     let navigate  = useNavigate();
 
     function handleOk() {
-
+        registrationForm.validateFields()
+            .then((values) => {
+                store.changeResidentialAddress(values);
+                navigate(FormRoutes.ResidentialAddress);
+            })
+            .catch((errorInfo) => console.log(errorInfo));
     }
 
     useEffect(() => {

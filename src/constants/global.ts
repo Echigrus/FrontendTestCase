@@ -13,7 +13,15 @@ class GlobalConstants {
 
     public static Regions = ['Москва', 'Московская область', 'Краснодарский край', 'Санкт-Петербург'];
 
-    public static Cities = ['Москва', 'Санкт-Петербург', 'Минск', 'Астана', 'Алматы']
+    public static Cities = ['Москва', 'Санкт-Петербург', 'Минск', 'Астана', 'Алматы'];
+
+    public static UploadImg = {
+        maxWidth: 5120,
+        maxHeight: 5120,
+        minWidth: 200,
+        minHeight: 200,
+        maxSize: 10485760
+    };
 };
 
 export { GlobalConstants };

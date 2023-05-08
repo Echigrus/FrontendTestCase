@@ -1,8 +1,11 @@
 import { Common } from "@classes/commonFunctions";
+import { FormStore } from "@store/formStore";
 import { FormInstance, Form, Col, Input, Row, DatePicker } from "antd";
 
 type TProps = {
-    form: FormInstance
+    form: FormInstance,
+    setIsLoading: React.Dispatch<React.SetStateAction<boolean>>,
+    store: FormStore
 };
 
 const FormCompany = ({ form }: TProps): JSX.Element => {

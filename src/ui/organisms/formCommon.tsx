@@ -23,7 +23,7 @@ const FormCommon = observer(({ store }: TProps): JSX.Element => {
             .then((values) => {
                 let newValues = values;
                 if (values.patronymic == "") newValues.patronymic = null;
-                store.changeCommonData(values);
+                store.changeCommonData(newValues);
                 navigate(FormRoutes.OwnershipForm);
             })
             .catch((errorInfo) => console.log(errorInfo));

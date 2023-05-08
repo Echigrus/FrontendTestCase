@@ -17,12 +17,22 @@ const FormResidentialAddress = observer(({ store }: TProps): JSX.Element => {
     let navigate  = useNavigate();
 
     function handleOk() {
-
+        residentialForm.validateFields()
+            .then((values) => {
+                store.changeResidentialAddress(values);
+                navigate(FormRoutes.Socials);
+            })
+            .catch((errorInfo) => console.log(errorInfo));
     }
 
     useEffect(() => {
-        residentialForm.setFieldsValue(store.getResidentialAddress());
-    }, []);
+        if (store.addressesMatch) {
+            residentialForm.setFieldsValue(store.getRegistrationAddress());
+        }
+        else {
+            residentialForm.setFieldsValue(store.getResidentialAddress());
+        }
+    }, [store.addressesMatch])
 
     return (
         <Col className="ftc-residential-address">
