@@ -5,6 +5,7 @@ import { faPerson, faPersonDress, faUser } from "@fortawesome/free-solid-svg-ico
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { FormStore } from "@store/formStore";
 import { Button, Col, DatePicker, Form, Input, Popconfirm, Radio, Row, Select } from "antd";
+import { toJS } from "mobx";
 import { observer } from "mobx-react";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
@@ -30,7 +31,7 @@ const FormCommon = observer(({ store }: TProps): JSX.Element => {
     }
 
     useEffect(() => {
-        commonForm.setFieldsValue(store.getCommonData());
+        commonForm.setFieldsValue(toJS(store.getCommonData()));
     }, []);
 
     return (

@@ -56,7 +56,7 @@ const FormAddress = ({ disabled, form }: TProps): JSX.Element => {
                         label="Город / Населенный пункт"
                         rules={[
                             { required: true, message: "Пожалуйста, введите населенный пункт" },
-                            { min: 2, max: 60, pattern: null, message: "" }
+                            { min: 2, max: 60, message: "От 2 до 60 символов", whitespace: true }
                         ]}
                     >
                         <Input placeholder="Введите населенный пункт" />
@@ -68,7 +68,7 @@ const FormAddress = ({ disabled, form }: TProps): JSX.Element => {
                         label="Улица"
                         rules={[
                             { required: true, message: "Пожалуйста, введите улицу" },
-                            { min: 2, max: 60, pattern: null, message: "" }
+                            { min: 2, max: 60, message: "От 2 до 60 символов", whitespace: true }
                         ]}
                     >
                         <Input placeholder="Введите улицу" />
@@ -81,10 +81,10 @@ const FormAddress = ({ disabled, form }: TProps): JSX.Element => {
                         name="house"
                         label="Дом"
                         rules={[
-                            { required: true, message: "Пожалуйста, введите населенный пункт", pattern: null }
+                            { required: true, message: "Пожалуйста, введите номер дома" }
                         ]}
                     >
-                        <Input placeholder="0" type="number" />
+                        <Input min={1} placeholder="0" type="number" />
                     </Form.Item>
                 </Col>
                 <Col className="eighth-width">
@@ -92,14 +92,14 @@ const FormAddress = ({ disabled, form }: TProps): JSX.Element => {
                         name="apartment"
                         label="Квартира"
                         rules={[
-                            {}
+                            { required: false, message: "Пожалуйста, введите номер квартиры" }
                         ]}
                     >
-                        <Input placeholder="0" type="number" />
+                        <Input min={1} placeholder="0" type="number" />
                     </Form.Item>
                 </Col>
                 <Col className="quarter-width">
-                    <Form.Item name="noApartment">
+                    <Form.Item name="noApartment" valuePropName="checked">
                         <Checkbox>Нет квартиры</Checkbox>
                     </Form.Item>
                 </Col>

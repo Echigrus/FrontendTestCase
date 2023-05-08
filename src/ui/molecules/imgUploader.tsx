@@ -1,5 +1,5 @@
 import React, { useRef, useState } from 'react';
-import { Modal, message, Button, Row, Space } from 'antd';
+import { Modal, message, Button, Space, Input } from 'antd';
 import { ImgCropper } from './imgCropper';
 import { GlobalConstants } from '@constants/global';
 import heic2any from 'heic2any';
@@ -40,16 +40,18 @@ const isJpgOrPng = (file: File) => {
 };
 
 type Props = {
-    onImageSelect: (file: File) => void;
-    onImageDelete: () => void;
+    photoSrc?: string,
+    disabled?: boolean,
+    onImageSelect: (file: File) => void,
+    onImageDelete: () => void
 };
 
-const ImgUploader = ({ onImageSelect, onImageDelete }: Props) => {
+const ImgUploader = ({ photoSrc, disabled = false, onImageSelect, onImageDelete }: Props) => {
     const [isModalOpen, setModalOpen] = useState(false);
     const [img, setImg] = useState<string>('');
     const cropImg = useRef('#');
     const [fileName, setFileName] = useState('');
-    const [cropName, setCropName] = useState('');
+    const [cropName, setCropName] = useState(photoSrc ?? '');
 
     const handleCancel = () => {
         setModalOpen(false);
@@ -119,27 +121,33 @@ const ImgUploader = ({ onImageSelect, onImageDelete }: Props) => {
     };
 
     return (
-        <Row justify={'center'}>
-            <Row align={'stretch'}>
-                <Space direction="vertical" align="center" className="uploader__buttons">
-                    <Row align={'stretch'} className="uploader__input-wrapper">
-                        <Button block={true} className="uploader__btn" type="primary">
-                            {cropName ? cropName : 'Загрузить'}
-                        </Button>
-                        <input
-                            className="uploader__input"
-                            type="file"
-                            onChange={handleFileSelect}
-                            accept="image/*, .heic"
-                        />
-                    </Row>
-                    <Row>
-                        <Button block={true} type="primary" danger onClick={onImageDelete}>
-                            Удалить
-                        </Button>
-                    </Row>
-                </Space>
-            </Row>
+        <div>
+            <Space.Compact className="uploader__controls">
+                <div className="uploader__input-wrapper">
+                    <Input 
+                        disabled={disabled}
+                        className="uploader__mask" 
+                        value={cropName ? cropName : 'Выберите или перетащите файл'} 
+                    />
+                    <input
+                        className="uploader__input"
+                        type="file"
+                        onChange={handleFileSelect}
+                        accept="image/*, .heic"
+                    />
+                </div>
+                <Button 
+                    danger
+                    disabled={cropName == '' || disabled} 
+                    onClick={() => {
+                        onImageDelete();
+                        setCropName('');
+                    }} 
+                    type="primary"
+                >
+                    Удалить
+                </Button>
+            </Space.Compact>
             <Modal
                 title="Выберите область"
                 cancelText="Отменить"
@@ -150,7 +158,7 @@ const ImgUploader = ({ onImageSelect, onImageDelete }: Props) => {
             >
                 <ImgCropper img={img} handleOnCrop={handleOnCrop} />
             </Modal>
-        </Row>
+        </div>
     );
 };
 

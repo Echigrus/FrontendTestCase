@@ -86,7 +86,7 @@ const ImgCropper = ({ img, handleOnCrop }: TProps) => {
                 </Col>
                 <Col span={24}>
                     <Cropper
-                        style={{ height: 500 }}
+                        style={{ maxHeight: `calc(100dvh - 250px)`}}
                         src={img}
                         viewMode={2}
                         aspectRatio={ratio}

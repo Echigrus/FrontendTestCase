@@ -1,7 +1,9 @@
+import { Dayjs } from "dayjs";
+
 type TEntrepreneur = {
     INN: string;
     scanINN?: string | File;
-    registrationDate?: Date;
+    dateOfRegistration?: Dayjs;
     OGRNIP: string;
     scanOGRNIP?: string | File;
     leaseContract?: string | File;

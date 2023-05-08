@@ -1,7 +1,5 @@
-import { SocialNetworks } from "@enums/socialNetworks";
-
 type TSocial = {
-    website: SocialNetworks;
+    website: string;
     profileLink: string;
 };
 

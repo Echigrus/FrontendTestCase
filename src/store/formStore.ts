@@ -6,6 +6,7 @@ import { TCompany } from "types/company";
 import { TEntrepreneur } from "types/entrepreneur";
 import { TForm } from "types/form";
 import { TSocial } from "types/social";
+import { toJS } from 'mobx';
 
 const emptyCommonData: TCommonData = {
     name: "",
@@ -21,7 +22,7 @@ const emptyCommonData: TCommonData = {
 const emptyEntrepreneur: TEntrepreneur = {
     INN: "",
     scanINN: null,
-    registrationDate: null,
+    dateOfRegistration: null,
     OGRNIP: "",
     scanOGRNIP: null,
     leaseContract: null,
@@ -34,14 +35,14 @@ const emptyCompany: TCompany = {
     shortName: "",
     INN: "",
     scanINN: null,
-    registrationDate: null,
+    dateOfRegistration: null,
     OGRN: "",
     scanOGRN: null
 };
 
 const emptyAddress: TAddress = {
-    country: "",
-    region: "",
+    country: null,
+    region: null,
     city: "",
     street: "",
     house: 1,
@@ -122,7 +123,7 @@ class FormStore {
 
     setEqualAddresses = () => {
         this.addressesMatch = true;
-        this.residentialAddress = this.registrationAddress;
+        this.residentialAddress = toJS(this.registrationAddress);
     }
 
     setUnequalAddresses = () => {

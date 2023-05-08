@@ -1,3 +1,5 @@
+import { Dayjs } from "dayjs";
+
 type TCommonData = {
     name: string;
     surname: string;
@@ -5,7 +7,7 @@ type TCommonData = {
     city: string;
     citizenship: string;
     male: boolean;
-    dateOfBirth?: Date;
+    dateOfBirth?: Dayjs;
     placeOfBirth: string;
 };
 

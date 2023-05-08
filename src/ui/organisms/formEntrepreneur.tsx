@@ -2,15 +2,16 @@ import { Common } from "@classes/commonFunctions";
 import { ImgUploader } from "@molecules/imgUploader";
 import { FormStore } from "@store/formStore";
 import { FormInstance, Form, Row, Col, Input, DatePicker, Checkbox } from "antd";
-import React from "react";
+import { useState } from "react";
 
 type TProps = {
     form: FormInstance,
-    setIsLoading: React.Dispatch<React.SetStateAction<boolean>>,
     store: FormStore
 };
 
-const FormEntrepreneur = ({ form, setIsLoading, store }: TProps): JSX.Element => {
+const FormEntrepreneur = ({ form, store }: TProps): JSX.Element => {
+    const [noLease, setNoLease] = useState(false);
+
     return (
         <Form
             className="ftc-entrepreneur-form"
@@ -57,7 +58,7 @@ const FormEntrepreneur = ({ form, setIsLoading, store }: TProps): JSX.Element =>
                 </Col>
                 <Col className="quarter-width">
                     <Form.Item
-                        name="registrationDate"
+                        name="dateOfRegistration"
                         label="Дата регистрации"
                         rules={[
                             { required: true, message: 'Пожалуйста, введите дату регистрации' },
@@ -88,7 +89,22 @@ const FormEntrepreneur = ({ form, setIsLoading, store }: TProps): JSX.Element =>
                             { required: true, message: "Пожалуйста, прикрепите скан ОГРНИП" }
                         ]}
                     >
-                        {/* TODO: загрузка файла */}
+                        <ImgUploader
+                            onImageSelect={(file) => {
+                                form.setFieldValue("scanOGRNIP", file);
+                                store.changeEntrepreneurData({
+                                    ...store.getEntrepeneurData(),
+                                    scanOGRNIP: file
+                                });
+                            }}
+                            onImageDelete={() => {
+                                form.setFieldValue("scanOGRNIP", null);
+                                store.changeEntrepreneurData({
+                                    ...store.getEntrepeneurData(),
+                                    scanOGRNIP: null
+                                });
+                            }}
+                        />
                     </Form.Item>
                 </Col>
             </Row>
@@ -97,8 +113,27 @@ const FormEntrepreneur = ({ form, setIsLoading, store }: TProps): JSX.Element =>
                     <Form.Item
                         name="leaseContract"
                         label="Скан договора аренды помещения (офиса)"
+                        rules={[
+                            { required: !noLease, message: "Пожалуйста, прикрепите скан договора аренды помещения (офиса)" }
+                        ]}
                     >
-                        {/* TODO: загрузка файла */}
+                        <ImgUploader
+                            disabled={noLease}
+                            onImageSelect={(file) => {
+                                form.setFieldValue("leaseContract", file);
+                                store.changeEntrepreneurData({
+                                    ...store.getEntrepeneurData(),
+                                    leaseContract: file
+                                });
+                            }}
+                            onImageDelete={() => {
+                                form.setFieldValue("leaseContract", null);
+                                store.changeEntrepreneurData({
+                                    ...store.getEntrepeneurData(),
+                                    leaseContract: null
+                                });
+                            }}
+                        />
                     </Form.Item>
                 </Col>
                 <Col className="half-width">
@@ -109,14 +144,36 @@ const FormEntrepreneur = ({ form, setIsLoading, store }: TProps): JSX.Element =>
                             { required: true, message: "Пожалуйста, прикрепите скан выписки из ЕГРИП" }
                         ]}
                     >
-                        {/* TODO: загрузка файла */}
+                        <ImgUploader
+                            onImageSelect={(file) => {
+                                form.setFieldValue("scanEGRIP", file);
+                                store.changeEntrepreneurData({
+                                    ...store.getEntrepeneurData(),
+                                    scanEGRIP: file
+                                });
+                            }}
+                            onImageDelete={() => {
+                                form.setFieldValue("scanEGRIP", null);
+                                store.changeEntrepreneurData({
+                                    ...store.getEntrepeneurData(),
+                                    scanEGRIP: null
+                                });
+                            }}
+                        />
                     </Form.Item>
                 </Col>
             </Row>
             <Row>
                 <Col className="quarter-width">
-                    <Form.Item name="noLeaseContract">
-                        <Checkbox>Нет договора</Checkbox>
+                    <Form.Item name="noLeaseContract" valuePropName="checked">
+                        <Checkbox 
+                            onChange={(e) => {
+                                setNoLease(e.target.checked);
+                                form.validateFields();
+                            }}
+                        >
+                            Нет договора
+                        </Checkbox>
                     </Form.Item>
                 </Col>
             </Row>

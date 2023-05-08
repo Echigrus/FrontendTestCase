@@ -2,59 +2,122 @@ import { FormRoutes } from "@enums/formRoutes";
 import { faPhone } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { FormStore } from "@store/formStore";
-import { Col, Row, Button, Select, Form } from "antd";
+import { Col, Row, Button, Select, Form, message } from "antd";
 import { observer } from "mobx-react";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { FormEntrepreneur } from "./formEntrepreneur";
 import { FormCompany } from "./formCompany";
 import { Loader } from "@atoms/loader";
+import { sendRequest } from "@api/sendRequest";
+import { ImageUploadResp } from "@api/responseModels/imageUploadResp";
+import { toJS } from "mobx";
 
 type TProps = {
     store: FormStore
 };
 
 const FormOwnership = observer(({ store }: TProps): JSX.Element => {
+    const [messageApi, contextHolder] = message.useMessage();
     let navigate  = useNavigate();
     const [entrepreneurForm] = Form.useForm();
     const [companyForm] = Form.useForm();
     const [isLoading, setIsLoading] = useState<boolean>(false);
 
-    async function handleOk() {
+    async function validateValues(): Promise<any> {
         let newValues = null;
         if (store.ownershipForm == "entrepreneur") {
-            entrepreneurForm.validateFields()
+            newValues = await entrepreneurForm.validateFields()
                 .then((values) => {
-                    newValues = values;
+                    return values;
                 })
                 .catch((errorInfo) => console.log(errorInfo));
-        } else {
-            companyForm.validateFields()
+        } else if (store.ownershipForm == "company") {
+            newValues = companyForm.validateFields()
                 .then((values) => {
-                    newValues = values;
+                    return values;
                 })
                 .catch((errorInfo) => console.log(errorInfo));
         }
-        if (newValues == null) return;
+        if (newValues?.errorFields) return null;
+        return newValues;
     }
 
-    useEffect(() => {
+    async function sendImage(img: File): Promise<string> {
+        const formData = new FormData();
+        formData.append("img", img);
+        const sendImg = await sendRequest<ImageUploadResp>('/upload-img', formData);
+        if (sendImg.errorMessages) throw sendImg.errorMessages;
+        return sendImg.data.url;
+    }
+
+    async function handleOk() {
+        let newValues = await validateValues();
+        if (newValues == null) return;
+        setIsLoading(true);
+        if (store.ownershipForm == "entrepreneur") {
+            try {
+                const urlScanINN = await sendImage(newValues['scanINN']);
+                const urlScanOGRNIP = await sendImage(newValues['scanOGRNIP']);
+                const urlLeaseContract = newValues['noLeaseContract'] 
+                    ? null 
+                    : await sendImage(newValues['leaseContract']);
+                const urlScanEGRIP = await sendImage(newValues['scanEGRIP']);
+                store.changeEntrepreneurData({
+                    ...newValues,
+                    scanINN: urlScanINN,
+                    scanOGRNIP: urlScanOGRNIP,
+                    scanEGRIP: urlScanEGRIP,
+                    leaseContract: urlLeaseContract
+                });
+                navigate(FormRoutes.RegistrationAddress);
+            } catch (err) {
+                messageApi.error(err);
+            }
+        }
+        else {
+            try {
+                const urlScanINN = await sendImage(newValues['scanINN']);
+                const urlScanOGRN = await sendImage(newValues['scanOGRN']);
+                store.changeCompanyData({
+                    ...newValues,
+                    scanINN: urlScanINN,
+                    scanOGRN: urlScanOGRN
+                });
+                navigate(FormRoutes.RegistrationAddress);
+            } catch (err) {
+                messageApi.error(err);
+            }
+        }
+        setIsLoading(false);
+    }
+
+    function setValues() {
         switch(store.ownershipForm) {
             case "entrepreneur":
-                entrepreneurForm.setFieldsValue(store.getEntrepeneurData());
+                entrepreneurForm.setFieldsValue(toJS(store.getEntrepeneurData()));
                 break;
             case "company":
-                companyForm.setFieldsValue(store.getCompanyData());
+                companyForm.setFieldsValue(toJS(store.getCompanyData()));
                 break;
             default: 
                 entrepreneurForm.resetFields();
                 companyForm.resetFields();
                 break;
         }
+    }
+
+    useEffect(() => {
+        setValues();
     }, [store.ownershipForm]);
+
+    useEffect(() => {
+        setValues();
+    }, [])
 
     return (
         <Col className="ftc-ownership">
+            { contextHolder }
             { isLoading && <Loader />}
             <Row>
                 <Col>
@@ -81,6 +144,7 @@ const FormOwnership = observer(({ store }: TProps): JSX.Element => {
                 <Col className="three-quarters-width">
                     <Select 
                         className="full-width"
+                        defaultValue={store.ownershipForm}
                         onSelect={(val) => store.changeOwnershipForm(val)}
                         options={[
                             {
@@ -99,14 +163,14 @@ const FormOwnership = observer(({ store }: TProps): JSX.Element => {
             {
                 store.ownershipForm == "entrepreneur" && (
                     <Row>
-                        <FormEntrepreneur form={entrepreneurForm} setIsLoading={setIsLoading} store={store} />
+                        <FormEntrepreneur form={entrepreneurForm} store={store} />
                     </Row>
                 )
             }
             {
                 store.ownershipForm == "company" && (
                     <Row>
-                        <FormCompany form={companyForm} setIsLoading={setIsLoading} store={store} />
+                        <FormCompany form={companyForm} messageApi={messageApi} setIsLoading={setIsLoading} store={store} />
                     </Row>
                 )
             }

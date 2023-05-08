@@ -40,7 +40,7 @@ body {
             }
         }
     
-        .ftc-common, .ftc-ownership, .ftc-registration-address {
+        .ftc-common, .ftc-ownership, .ftc-registration-address, .ftc-residential-address, .ftc-socials {
             background-color: $white;
             height: 100%;
             padding: 60px;
@@ -98,6 +98,42 @@ body {
         
         .ftc-common .ftc-common-form .ftc-common-male .ant-row {
             padding: 0 !important;
+        }
+
+        .ftc-ownership .ftc-company-form .inn-space-compact {
+            button {
+                padding-left: 0;
+            }
+
+            .inn-control {
+                margin-bottom: 0;
+                
+                .ant-row {
+                    padding-bottom: 0;
+
+                    .ant-col {
+                        padding-right: 0;
+                    }
+                }
+            }
+        }
+
+        .ftc-socials {
+            .ant-form-item {
+                margin-bottom: 0;
+
+                .ant-col .ant-col {
+                    padding: 0;
+                }
+
+                .ant-select {
+                    min-width: 150px;
+                }
+
+                .delete-btn {
+                    margin-left: 5px;
+                }
+            }
         }
     }
 }

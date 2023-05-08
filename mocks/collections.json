@@ -1,0 +1,6 @@
+[
+  {
+    "id": "base",
+    "routes": ["upload-img:success", "save-form:success"]
+  }
+]

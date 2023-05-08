@@ -15,6 +15,12 @@ class GlobalConstants {
 
     public static Cities = ['Москва', 'Санкт-Петербург', 'Минск', 'Астана', 'Алматы'];
 
+    public static SocialNetworks = [
+        { name: "ВКонтакте", prefix: "vk.com/" },
+        { name: "Instagram", prefix: "instagram.com/" },
+        { name: "YouTube", prefix: "youtube.com/" }
+    ];
+
     public static UploadImg = {
         maxWidth: 5120,
         maxHeight: 5120,
@@ -22,6 +28,10 @@ class GlobalConstants {
         minHeight: 200,
         maxSize: 10485760
     };
+
+    public static ApiKey = "49a0c53e1b18467d140f4bba4c70aa25d582fb71";
+
+    public static CompanyInfoUrl = "https://suggestions.dadata.ru/suggestions/api/4_1/rs";
 };
 
 export { GlobalConstants };

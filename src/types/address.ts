@@ -1,3 +1,5 @@
+import { Dayjs } from "dayjs";
+
 type TAddress = {
     country: string;
     region: string;
@@ -6,7 +8,7 @@ type TAddress = {
     house: number;
     apartment?: number;
     noApartment: boolean;
-    dateOfRegistration?: Date;
+    dateOfRegistration?: Dayjs;
 };
 
 export { TAddress };
